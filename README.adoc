@@ -95,7 +95,7 @@ image::https://opencollective.com/doctoolchain/sponsor/0/avatar.svg["Sponsor", l
 
 === Supported by
 
-[![JetBrains logo.](https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg)](https://jb.gg/OpenSourceSupport)
+image::https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg["IDE Sponsor",link="https://jb.gg/OpenSourceSupport"]
 
 === History of this project
 
