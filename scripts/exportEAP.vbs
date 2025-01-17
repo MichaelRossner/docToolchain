@@ -190,20 +190,30 @@
         diagramName = Replace(diagramName,vbCr,"")
         diagramName = Replace(diagramName,vbLf,"")
         diagramName = NormalizeName(diagramName)
-        filename = objFSO.BuildPath(path, diagramName & imageFormat)
+        diagramGUID = currentDiagram.DiagramGUID
+        diagramGUID = Replace(diagramGUID,"{","")
+        diagramGUID = Replace(diagramGUID,"}","")
+        If InStr(additionalOptions, "append_GUID") > 0 Then
+            diagramName = diagramName +  "_" + diagramGUID
+            filename = objFSO.BuildPath(path, diagramName & imageFormat)
+        ElseIf InStr(additionalOptions, "prepend_GUID") > 0 Then
+            diagramName = diagramGUID + "_" + diagramName
+            filename = objFSO.BuildPath(path, diagramName & imageFormat)
+        ElseIf InStr(additionalOptions, "use_GUID") > 0 Then
+            diagramName = diagramGUID
+            filename = objFSO.BuildPath(path, diagramName & imageFormat)
+        Else
+            filename = objFSO.BuildPath(path, diagramName & imageFormat)
+        End If
 
         exportDiagram = True
         If objFSO.FileExists(filename) Then
             WScript.echo " --- " & filename & " already exists."
-            If Len(additionalOptions) > 0 Then
-                If InStr(additionalOptions, "KeepFirstDiagram") > 0 Then
-                    WScript.echo " --- Skipping export -- parameter 'KeepFirstDiagram' set."
-                Else
-                    WScript.echo " --- Overwriting -- parameter 'KeepFirstDiagram' not set."
-                    exportDiagram = False
-                End If
+            If InStr(additionalOptions, "KeepFirstDiagram") > 0 Then
+                WScript.echo " --- Skipping export -- parameter 'KeepFirstDiagram' set."
             Else
                 WScript.echo " --- Overwriting -- parameter 'KeepFirstDiagram' not set."
+                exportDiagram = False
             End If
         End If
         If exportDiagram Then
