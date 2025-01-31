@@ -14,8 +14,9 @@ and this project tries to adhere to https://semver.org/spec/v2.0.0.html[Semantic
 
 === added
 
-* possibiblity to change the search form
+* possibility to change the search form
 * https://github.com/docToolchain/docToolchain/issues/1468[#1468: Add progress indicator/logging for 'allPages' fetch in publishToConfluence task]
+* exportEA: add option to extend the diagram name during export with the GUID to guarantee uniqueness https://github.com/docToolchain/docToolchain/pull/1473[#1473 exportEA: Add option to include GUID into diagram names]
 
 === changed
 
