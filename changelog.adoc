@@ -14,8 +14,9 @@ and this project tries to adhere to https://semver.org/spec/v2.0.0.html[Semantic
 
 === added
 
-* possibiblity to change the search form
+* possibility to change the search form
 * https://github.com/docToolchain/docToolchain/issues/1468[#1468: Add progress indicator/logging for 'allPages' fetch in publishToConfluence task]
+* allow filtering of diagrams within a package - https://github.com/docToolchain/docToolchain/pull/1472[#1472: exportEA: Add filter to select diagrams via tag in EA directly]
 
 === changed
 
