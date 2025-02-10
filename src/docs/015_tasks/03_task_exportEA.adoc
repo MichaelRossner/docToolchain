@@ -117,11 +117,16 @@ Default is set to ".png".
 Please check your Enterprise Architect version which formats are supported.
 
 ==== additionalOptions
-This parameter is used to define the specific behavior of the export. Currently, these options are supported:
+This parameter is used to define the specific behavior of the export. Currently, these mutually exclusive options are supported:
 
-`KeepFirstDiagram`
-
+* `KeepFirstDiagram` +
 If diagrams are not uniquely named, the last diagram will be saved. If you want to prevent diagrams from being overwritten, add this parameter to additionalOptions.
+* `append_GUID` +
+Append the diagram GUID to the diagram name to guarantee a unique name.
+* `prepend_GUID` +
+Prepend the diagram GUID before the diagram name guarantee a unique name.
+* `use_GUID` +
+Ignore the diagram name and only use the GUID as diagram name.
 
 ==== verbose output
 If set to bigger than 0, the exportEA task will output additional information about the export process.
