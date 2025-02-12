@@ -35,6 +35,17 @@
        NormalizeName = re.Replace(theName, "_")
     End Function
 
+    Function isSelectedViaDiagramFilter(diagram, diagramFilter)
+        isSelectedViaDiagramFilter = False
+        If Len(diagramFilter) > 0 Then
+            If InStr(1, diagram.Stereotype, diagramFilter, vbTextCompare) = 0 Then
+                WScript.Echo " --- Skipping diagram '" & diagram.Name & "' because of filter. Required values are: " & diagramFilter & " -- found: " & diagram.Stereotype
+            Else
+                isSelectedViaDiagramFilter = True
+            End If
+        End If
+    End Function
+
     Sub WriteNote(currentModel, currentElement, notes, prefix)
         If (Left(notes, 6) = "{adoc:") Then
             strFileName = Trim(Mid(notes,7,InStr(notes,"}")-7))
@@ -170,16 +181,6 @@
         End If
     End Sub
 
-    Sub isSelectedViaDiagramFilter(diagram)
-        If Len(diagramFilter) > 0 Then
-            If InStr(1, diagram.Stereotype, diagramFilter, vbTextCompare) = 0 Then
-                WScript.Echo " --- Skipping diagram '" & diagramName & "' because of filter. Required values are: " & diagramFilter & " -- found: " & diagram.Stereotype
-                return False
-            End If
-        End If
-        return True
-    End Sub
-
     Sub SaveDiagram(currentModel, currentDiagram)
         Dim exportDiagram ' As Boolean
 
@@ -217,7 +218,7 @@
             filename = objFSO.BuildPath(path, diagramName & imageFormat)
         End If
 
-        If isSelectedViaDiagramFilter(currentDiagram) = False Then
+        If isSelectedViaDiagramFilter(currentDiagram, diagramFilter) = False Then
             Repository.CloseDiagram(currentDiagram.DiagramID)
             Exit Sub
         End If
@@ -260,9 +261,7 @@
         Set currentPackage = thePackage
 
         ' export element notes
-        Dim SkipDiagram
         For Each currentElement In currentPackage.Elements
-          SkipDiagram = False
           WriteNote currentModel, currentElement, currentElement.Notes, ""
           ' export connector notes
           For Each currentConnector In currentElement.Connectors
@@ -272,10 +271,7 @@
               End If
           Next
           if (Not currentElement.CompositeDiagram Is Nothing) Then
-              If isSelectedViaDiagramFilter(currentElement.CompositeDiagram) = False Then
-                  SkipDiagram = True
-              End If
-              If NOT SkipDiagram Then
+              If isSelectedViaDiagramFilter(currentElement.CompositeDiagram, diagramFilter) Then
                 SyncJira currentModel, currentElement.CompositeDiagram
                 SaveDiagram currentModel, currentElement.CompositeDiagram
               End If
@@ -289,11 +285,7 @@
         ' Iterate through all diagrams in the current package
         For Each currentDiagram In currentPackage.Diagrams
 
-            SkipDiagram = False
-            If isSelectedViaDiagramFilter(currentDiagram) = False Then
-                SkipDiagram = True
-            End If
-            If NOT SkipDiagram Then
+            If isSelectedViaDiagramFilter(currentDiagram, diagramFilter) Then
               SyncJira currentModel, currentDiagram
               SaveDiagram currentModel, currentDiagram
             End If
